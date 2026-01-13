@@ -1,40 +1,48 @@
 ---
 title: Build an App
-description: A guide to building a next.js app on Base using OnchainKit
+description: Build a Next.js app on Base using OnchainKit
 ---
 
-Welcome to the Base quickstart guide! In this walkthrough, we'll create a simple onchain app from start to finish. Whether you're a seasoned developer or just starting out, this guide has got you covered.
+Welcome to the Base quickstart! This walkthrough will guide you through creating a simple onchain app from scratch. Whether you're an experienced developer or just getting started, you'll be up and running quickly.
 
-## What You'll Achieve
+## What You'll Build
 
-By the end of this quickstart, you'll have built an onchain app by:
+By the end of this guide, you'll have a working onchain app that:
 
-- Configuring your development environment
-- Deploying your smart contracts to Base
-- Interacting with your deployed contracts from the frontend
+- Connects to the Base network
+- Deploys smart contracts to Base Sepolia (testnet)
+- Interacts with your contracts through a web interface
 
-Our simple app will be an onchain tally app which lets you add to a total tally, stored onchain, by pressing a button.
+You'll build an onchain tally counter that increments a value stored in a smart contract whenever you press a button.
 
 <Tip>
 **Why Base?**
 
-Base is a fast, low-cost, builder-friendly Ethereum L2 built to bring the next billion users onchain. By following this guide, you'll join a vibrant ecosystem of developers, creators, and innovators who are building a global onchain economy.
+Base is a fast, low-cost Ethereum L2 designed to bring the next billion users onchain. Join a vibrant ecosystem of developers and creators building the global onchain economy.
 </Tip>
 
+## Prerequisites
+
+Before starting, make sure you have:
+
+- Node.js v19+ installed
+- A code editor (VS Code recommended)
+- Basic familiarity with React and TypeScript
+- A wallet with Base Sepolia ETH (get free testnet ETH from [these faucets](/base-chain/tools/network-faucets))
 
 ## Set Up Your Development Environment
 
 <Steps>
-  <Step title="Bootstrap with OnchainKit">
-  OnchainKit is a library of ready-to-use React components and Typescript utilities for building onchain apps. Run the following command in your terminal and follow the prompts to bootstrap your project.
+  <Step title="Create your OnchainKit project">
+  OnchainKit provides ready-to-use React components and TypeScript utilities for building onchain apps. Create your project by running:
 
   ```bash Terminal
   npm create onchain@latest
   ```
 
-  The prompts will ask you for a CDP API Key which you can get [here](https://portal.cdp.coinbase.com/projects/api-keys/client-key).
+  The setup will prompt you for a CDP API Key. Get yours from the [Coinbase Developer Platform](https://portal.cdp.coinbase.com/projects/api-keys/client-key).
 
-  Once you've gone through the prompts, you'll have a new project directory with a basic OnchainKit app. Run the following to see it live.
+  After completing the prompts, start your development server:
 
   ```bash Terminal
   cd my-onchainkit-app
@@ -42,25 +50,25 @@ Base is a fast, low-cost, builder-friendly Ethereum L2 built to bring the next b
   npm run dev
   ```
 
-  You should see the following screen.
+  Open your browser to see the default OnchainKit template running:
 
-<Frame>
-  <img alt="OnchainKit Template" src="/images/onchainkit/quickstart.png" height="364" />
-</Frame>
+  <Frame>
+    <img alt="OnchainKit Template" src="/images/onchainkit/quickstart.png" height="364" />
+  </Frame>
 
-  Once we've deployed our contracts, we'll add a button that lets us interact with our contracts.
-
+  Next, we'll add smart contract functionality to this app.
   </Step>
-  <Step title="Install and initialize Foundry">
-  The total tally will be stored onchain in a smart contract. We'll use the Foundry framework to deploy our contract to the Base Sepolia testnet.
 
-  1. Create a new "contracts" folder in the root of your project
+  <Step title="Set up Foundry for smart contracts">
+  Foundry is a toolkit for Ethereum development written in Rust. We'll use it to write, test, and deploy our smart contracts.
+
+  1. Create a contracts directory in your project root:
 
   ```bash Terminal
   mkdir contracts && cd contracts
   ```
 
-  2. Install and initialize Foundry
+  2. Install Foundry and initialize a new project:
 
   ```bash Terminal
   curl -L https://foundry.paradigm.xyz | bash
@@ -68,116 +76,117 @@ Base is a fast, low-cost, builder-friendly Ethereum L2 built to bring the next b
   forge init --no-git
   ```
 
-  Open the project and find the `Counter.sol` contract file in the `/contracts/src` folder. You'll find the simple logic for our tally app.
-
   <Tip>
-  **--no-git**
+  **Using --no-git**
 
-  Because `contracts` is a folder in our project, we don't want to initialize a separate git repository for it, so we add the `--no-git` flag.
+  Since `contracts` is a subdirectory in your existing project, we use `--no-git` to avoid creating a nested git repository.
   </Tip>
+
+  Open `contracts/src/Counter.sol` to see the smart contract we'll deploy. It includes simple increment and decrement functions for our tally counter.
   </Step>
-  <Step title="Configure Foundry with Base">
-  To deploy your smart contracts to Base, you need two key components:
 
-  1. A node connection to interact with the Base network
-  2. A funded private key to deploy the contract
+  <Step title="Configure Base network connection">
+  To deploy contracts to Base, you need:
 
-  Let's set up both of these:
+  1. **RPC endpoints** to connect to the Base network
+  2. **A funded wallet** to pay for deployment gas fees
 
-  - Create a `.env` file in your `contracts` directory and add the Base and Base Sepolia RPC URLs
+  Create a `.env` file in your `contracts` directory:
 
   ```bash contracts/.env
   BASE_RPC_URL="https://mainnet.base.org"
   BASE_SEPOLIA_RPC_URL="https://sepolia.base.org"
   ```
 
-  -Load your environment variables
+  Load these environment variables:
 
   ```bash Terminal
   source .env
   ```
 
   <Tip>
-  **Base Sepolia**
+  **About Base Sepolia**
 
-  Base Sepolia is the test network for Base, which we will use for the rest of this guide. You can obtain free Base Sepolia ETH from one of the [faucets listed here](/base-chain/tools/network-faucets).
+  Base Sepolia is the testnet for Base. Use it for development and testing without spending real ETH. Get free testnet ETH from [Base faucets](/base-chain/tools/network-faucets).
   </Tip>
   </Step>
-  <Step title="Secure your private key">
-  A private key with testnet funds is required to deploy the contract. You can generate a fresh private key [here](https://visualkey.link/).
 
-  1. Store your private key in Foundry's secure keystore
+  <Step title="Set up your deployment wallet">
+  You need a private key with testnet funds to deploy contracts. Generate a new private key using [VisualKey](https://visualkey.link/).
+
+  1. Store your private key securely in Foundry's keystore:
 
   ```bash Terminal
   cast wallet import deployer --interactive
   ```
 
-  2. When prompted enter your private key and a password.
+  2. Enter your private key and create a password when prompted.
 
-  Your private key is stored in `~/.foundry/keystores` which is not tracked by git.
+  Your private key is now encrypted and stored in `~/.foundry/keystores`, which is not tracked by git.
 
   <Warning>
-  Never share or commit your private key. Always keep it secure and handle with care.
+  **Protect Your Private Key**
+  
+  Never share, commit, or expose your private key. Treat it like a password. For production deployments, use hardware wallets or secure key management systems.
   </Warning>
   </Step>
 </Steps>
 
-## Deploy Your Contracts
+## Deploy Your Smart Contract
 
-Now that your environment is set up, let's deploy your contracts to Base Sepolia. The foundry project provides a deploy script that will deploy the Counter.sol contract.
+With your environment configured, you're ready to deploy the Counter contract to Base Sepolia.
 
 <Steps>
-  <Step title="Run the deploy script">
-  1. Use the following command to compile and deploy your contract
+  <Step title="Compile and deploy your contract">
+  Run this command to compile and deploy `Counter.sol`:
 
   ```bash Terminal
   forge create ./src/Counter.sol:Counter --rpc-url $BASE_SEPOLIA_RPC_URL --account deployer
   ```
 
-  Note the format of the contract being deployed is `<contract-path>:<contract-name>`.
+  Enter your keystore password when prompted. The format `<contract-path>:<contract-name>` tells Foundry which contract to deploy.
   </Step>
-  <Step title="Save the contract address">
-  After successful deployment, the transaction hash will be printed to the console output
 
-  Copy the deployed contract address and add it to your `.env` file
+  <Step title="Save your contract address">
+  After successful deployment, you'll see the contract address in the console output. Copy it and add it to your `contracts/.env` file:
 
-  ```bash
+  ```bash contracts/.env
   COUNTER_CONTRACT_ADDRESS="0x..."
   ```
 
-  </Step>
-  <Step title="Load the new environment variable">
+  Load the updated environment variables:
+
   ```bash Terminal
   source .env
   ```
   </Step>
-  <Step title="Verify Your Deployment">
-  To ensure your contract was deployed successfully:
 
-  1. Check the transaction on [Sepolia Basescan](https://sepolia.basescan.org/).
-  2. Use the `cast` command to interact with your deployed contract from the command line
+  <Step title="Verify deployment">
+  Confirm your contract deployed correctly:
 
-  ```bash
+  1. **Check on Basescan**: Search for your contract address on [Sepolia Basescan](https://sepolia.basescan.org/)
+
+  2. **Query the contract**: Use Foundry's `cast` tool to read the current counter value:
+
+  ```bash Terminal
   cast call $COUNTER_CONTRACT_ADDRESS "number()(uint256)" --rpc-url $BASE_SEPOLIA_RPC_URL
   ```
 
-  This will return the initial value of the Counter contract's `number` storage variable, which will be `0`.
+  This should return `0`, the initial value of the counter.
   </Step>
 </Steps>
 
-**Congratulations! You've deployed your smart contract to Base Sepolia!**
+**Success!** Your smart contract is now live on Base Sepolia. Next, we'll connect it to your frontend.
 
-Now lets connect the frontend to interact with your recently deployed contract.
+## Connect Your Frontend to the Contract
 
-## Interacting with your contract
-
-To interact with the smart contract logic, we need to submit an onchain transaction. We can do this easily with the `Transaction` component. This is a simplified version of the `Transaction` component, designed to streamline the integration process. Instead of manually defining each subcomponent and prop, we can use this shorthand version which renders our suggested implementation of the component and includes the `TransactionButton` and `TransactionToast` components.
+Now we'll add a button to your app that increments the onchain counter. OnchainKit's `Transaction` component handles the entire transaction flow, including wallet connection, transaction submission, and status updates.
 
 <Steps>
   <Step title="Add the Transaction component">
-  Lets add the `Transaction` component to our `page.tsx` file. Delete the existing content in the `main` tag and replace it with the snippet below.
+  Open `app/page.tsx` and replace the contents of the `main` tag with:
 
-  ```tsx page.tsx
+  ```tsx app/page.tsx
   // @noErrors: 2307 - Cannot find module '@/calls'
   import { Transaction } from '@coinbase/onchainkit/transaction';
   import { calls } from '@/calls';
@@ -190,12 +199,15 @@ To interact with the smart contract logic, we need to submit an onchain transact
     </div>
   </main>;
   ```
-  </Step>
-  <Step title="Defining the contract calls">
-  In the previous code snippet, you'll see we imported `calls` from the `calls.ts` file. This file provides the details needed to interact with our contract and call the `increment` function. Create a new `calls.ts` file in the same folder as your `page.tsx` file and add the following code.
 
-  ```ts calls.ts
-  const counterContractAddress = '0x...'; // add your contract address here
+  The `Transaction` component provides a complete transaction UI with a submit button and toast notifications.
+  </Step>
+
+  <Step title="Define your contract interaction">
+  The `calls` import specifies which contract function to execute. Create `app/calls.ts` with:
+
+  ```ts app/calls.ts
+  const counterContractAddress = '0x...'; // Replace with your contract address
   const counterContractAbi = [
     {
       type: 'function',
@@ -216,35 +228,51 @@ To interact with the smart contract logic, we need to submit an onchain transact
   ];
   ```
 
-  <Tip>
-  **Contract Address**
+  Replace `'0x...'` with the contract address you saved earlier.
 
-  The `calls.ts` file contains the details of the contract interaction, including the contract address, which we saved in the previous step.
+  <Tip>
+  **About the ABI**
+
+  The ABI (Application Binary Interface) defines how to interact with your smart contract. We only include the `increment` function since that's all we need.
   </Tip>
   </Step>
-  <Step title="Testing the component">
-  Now, when you connect a wallet and click on the `Transact` button and approve the transaction, it will increment the tally onchain by one.
 
-  We can verify that the onchain count took place onchain by once again using `cast` to call the `number` function on our contract.
+  <Step title="Test your app">
+  1. **Connect your wallet**: Click the wallet button in your app and connect using a wallet with Base Sepolia ETH
+
+  2. **Increment the counter**: Click "Transact" and approve the transaction in your wallet
+
+  3. **Verify onchain**: After the transaction confirms, check that the counter incremented:
 
   ```bash Terminal
   cast call $COUNTER_CONTRACT_ADDRESS "number()(uint256)" --rpc-url $BASE_SEPOLIA_RPC_URL
   ```
 
-  If the transaction was successful, the tally should have incremented by one!
+  The value should now be `1` (or higher if you clicked multiple times).
   </Step>
 </Steps>
 
-We now have a working onchain tally app! While the example is simple, it illustrates the end to end process of building on onchain app. We:
+**Congratulations!** You've built a complete onchain app. While simple, this demonstrates the full development cycle:
 
-- Configured a project with frontend and onchain infrastructure
-- Deployed a smart contract to Base Sepolia
-- Interacted with the contract from the frontend
+- Set up a project with frontend and smart contract infrastructure
+- Deployed a contract to Base Sepolia
+- Connected your frontend to interact with the deployed contract
 
-## Further Improvements
+## Next Steps
 
-This is just the beginning. There are many ways we can improve upon this app. For example, we could:
+Enhance your app with these features:
 
-- Make the `increment` transaction gasless by integrating with [Paymaster](/onchainkit/transaction/transaction#sponsor-with-paymaster-capabilities)
-- Improve the wallet connection and sign up flow with the [WalletModal](/onchainkit/wallet/wallet-modal) component
-- Add onchain [Identity](/onchainkit/identity/identity) so we know who added the most recent tally
+- **Gasless transactions**: Sponsor user transactions with [Paymaster](/onchainkit/transaction/transaction#sponsor-with-paymaster-capabilities) so users don't pay gas fees
+- **Better wallet UX**: Improve sign-in and wallet connection with the [WalletModal](/onchainkit/wallet/wallet-modal) component
+- **Onchain identity**: Add [Identity](/onchainkit/identity/identity) components to display user names and avatars
+- **Deploy to mainnet**: Once tested, deploy to Base mainnet for real users
+- **Add more functionality**: Expand your contract with additional features like decrement, reset, or multiple counters
+
+## Additional Resources
+
+- [OnchainKit Documentation](/onchainkit)
+- [Base Developer Documentation](https://docs.base.org)
+- [Foundry Book](https://book.getfoundry.sh/)
+- [Base GitHub Examples](https://github.com/base-org/base-examples)
+
+Need help? Join the [Base Discord](https://discord.gg/buildonbase) to connect with other developers.
