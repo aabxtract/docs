@@ -23,144 +23,305 @@
 [![GitHub pull requests by-label](https://img.shields.io/github/issues-pr-raw/base/docs)](https://github.com/base/docs/pulls)
 [![GitHub Issues](https://img.shields.io/github/issues-raw/base/docs.svg)](https://github.com/base/docs/issues)
 
-Base Docs are community-managed. We welcome and encourage contributions from everyone to keep these docs accurate, helpful, and up to date.
+# Base Documentation Contributing Guide
 
-> Note: This repository powers the public Base documentation site. Content lives under `docs/`.
+Base Docs are community-managed. We welcome contributions from everyone to keep these docs accurate, helpful, and up to date.
 
-## Local development
+> **Note:** This repository powers the public Base documentation site at [docs.base.org](https://docs.base.org). All documentation content lives under the `docs/` directory.
 
-Prerequisite: Node.js v19+.
+## Quick start
 
-1. Clone the repository.
-2. Install the Mint CLI to preview documentation changes locally:
+### Prerequisites
 
-```bash
-npm i -g mint
-```
+- Node.js v19 or higher
 
-3. Preview locally (run from the `docs/` directory where `docs.json` lives):
+### Local development setup
 
-```bash
-cd docs
-mint dev
-```
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/base/docs.git
+   cd docs
+   ```
 
-Alternatively, without a global install:
+2. **Install the Mint CLI**
+   ```bash
+   npm i -g mint
+   ```
 
-```bash
-npx mint dev
-```
+3. **Preview documentation locally**
+   
+   Navigate to the `docs/` directory (where `docs.json` is located) and run:
+   ```bash
+   cd docs
+   mint dev
+   ```
+   
+   Alternatively, run without a global install:
+   ```bash
+   npx mint dev
+   ```
 
-### Troubleshooting
+### Troubleshooting local preview
 
-- Ensure Node.js v19+ is installed and that you run `mint dev` from the directory containing `docs.json` (usually `docs/`).
-- Local preview differs from production: run `mint update` to update the CLI.
+- Verify Node.js v19+ is installed: `node --version`
+- Ensure you're running `mint dev` from the directory containing `docs.json` (typically `docs/`)
+- If preview differs from production, update the CLI: `mint update`
 
 ## How to contribute
 
-1. **Fork and branch**: Fork `base/docs` and create a descriptive branch for your change.
-2. **Edit content in `docs/`**: Follow the structure and style guidelines below. Preview locally with the Mint CLI.
-3. **Open a pull request**: Provide a clear summary and links to related pages. The docs team and community will review.
+### Contribution workflow
 
-> Tip: Prefer small, focused PRs. Link related guides and references directly in your content.
+1. **Fork and create a branch**: Fork the `base/docs` repository and create a descriptive branch for your changes (e.g., `fix-wallet-setup-guide` or `add-smart-contract-example`)
+
+2. **Make your changes**: Edit content in the `docs/` directory following our structure and style guidelines below. Preview changes locally using the Mint CLI
+
+3. **Submit a pull request**: Open a PR with a clear summary of your changes and links to related pages. Our docs team and community will review
+
+> **Tip:** Submit small, focused PRs that address one topic or fix at a time. This speeds up review and makes it easier to iterate.
+
+### What we're looking for
+
+- **Corrections**: Fix typos, broken links, outdated information, or technical inaccuracies
+- **Clarity improvements**: Simplify complex explanations, add missing context, or improve code examples
+- **New guides**: Add tutorials or examples that fit within existing sections and serve clear Base use cases
+- **Code updates**: Update examples to reflect current best practices or API changes
 
 ## Documentation structure
 
-### Core principle: maintain existing structure
+### Core principle: work within existing structure
 
-> Warning: Do not create new top-level sections. Place all new content within existing folders under `docs/`.
+> **Warning:** Do not create new top-level sections. All new content must fit within existing directories under `docs/`.
 
-The Base documentation is organized into established sections (for example: `get-started/`, `learn/`, `base-account/`, `base-app/`, `base-chain/`, `cookbook/`, `mini-apps/`, `onchainkit/`). Fit new content into the most relevant existing section.
+The Base documentation is organized into established sections:
 
-### Navigation policy
+- `get-started/` — Quick setup and onboarding
+- `learn/` — Conceptual explanations and architecture
+- `base-account/` — Base Account features and integration
+- `base-app/` — Base App development guides
+- `base-chain/` — Base chain technical details
+- `cookbook/` — Use case-focused patterns and recipes
+- `mini-apps/` — Mini app development guides
+- `onchainkit/` — OnchainKit SDK documentation
 
-> Note: We generally do not change the global navigation (top-level tabs) or sidebar sections unless there is a clear, broadly beneficial need. Contributions should focus on improving existing pages and adding new pages within current sections.
+Place your content in the most relevant existing section.
 
-### Section purpose and placement
+### Navigation and sidebar policy
 
-- **Quickstart**: End-to-end setup to first success. Keep concise and current.
-- **Concepts**: Explanations of components, architecture, and design philosophy.
-- **Guides**: Step-by-step, action-oriented tutorials for specific tasks.
-- **Examples**: Complete, runnable examples demonstrating real-world usage.
-- **Technical Reference**: API/method/component specs with parameters and return types.
-- **Contribute**: Information for contributors and process updates.
+> **Note:** We rarely modify the global navigation (top-level tabs) or create new sidebar sections. Focus on improving existing pages and adding content within current sections. Structural changes require strong justification and broad community benefit.
 
-#### Cookbook scope
+### Where to place your content
 
-- The `cookbook/` section hosts use case-focused guides and patterns, not product-specific documentation.
-- Prefer cross-cutting solutions that illustrate how to build on Base across tools and scenarios.
+| Section | Purpose | Examples |
+|---------|---------|----------|
+| **Quickstart** | End-to-end setup to first success | "Deploy your first contract", "Connect your wallet" |
+| **Concepts** | Explanations of components and architecture | "How Base Account works", "Gas optimization strategies" |
+| **Guides** | Step-by-step tutorials for specific tasks | "Implementing social login", "Building a token swap" |
+| **Examples** | Complete, runnable code demonstrating real usage | "NFT minting app", "DeFi dashboard" |
+| **Reference** | API specs, method signatures, parameters | "OnchainKit API reference", "Smart contract interfaces" |
+| **Cookbook** | Cross-cutting patterns and use cases | "Multi-chain deployment", "Testing strategies" |
 
-> Warning: Avoid subsection proliferation:
-> - Put all guides at the same level within the Guides section.
-> - Organize Reference by component/feature, not per use case.
-> - Use cross-links instead of adding new structural layers.
+#### Cookbook guidelines
 
-## Style and formatting
+- The `cookbook/` section is for use case-focused guides and reusable patterns, not product-specific documentation
+- Prefer solutions that demonstrate building on Base across multiple tools and scenarios
+- Focus on real-world problems developers commonly face
+
+### Avoid subsection proliferation
+
+> **Warning:** Keep the structure flat and scannable:
+> - Place all guides at the same hierarchical level within their section
+> - Organize Reference documentation by component or feature, not by use case
+> - Use cross-links between pages instead of creating nested folder structures
+> - If you need more than two levels of nesting, reconsider your approach
+
+## Writing and formatting guidelines
 
 ### Writing style
 
-1. Be concise and consistent; use active voice and second person.
-2. Focus on the happy path; mention alternatives briefly where relevant.
-3. Use explicit, descriptive headings and filenames.
-4. Maintain consistent terminology; introduce abbreviations on first use.
+1. **Be clear and concise**: Use active voice and address the reader directly ("you"). Remove unnecessary words
+2. **Focus on the happy path**: Show the most common successful approach first. Mention alternatives only when relevant
+3. **Use descriptive headings**: Make headings specific and scannable (prefer "Configure wallet connection" over "Setup")
+4. **Maintain consistent terminology**: Use the same terms throughout. Define abbreviations on first use (e.g., "Smart Wallet Account (SWA)")
+5. **Show, don't just tell**: Include working code examples wherever possible
 
-### AI-friendly content
+### Writing for AI and human readers
 
-- Use clear, explicit language and link related pages directly.
-- Prefer bulleted lists for options/steps when not sequential.
-- Name and reference libraries and tools explicitly.
-- Use semantic, readable URLs and avoid ambiguous abbreviations.
+Our documentation should be easily understood by both human developers and AI assistants that help them code.
 
-> Checklist:
-> - Would a Large Language Model understand and follow this content?
-> - Can an engineer copy, paste, and run the examples as-is?
+**Best practices:**
+- Use explicit, unambiguous language
+- Link to related pages directly using descriptive anchor text
+- Name libraries, tools, and versions explicitly (e.g., "OnchainKit v0.25" not "the latest version")
+- Structure content with clear headings and logical flow
+- Prefer bulleted lists for non-sequential options or features
+- Use semantic, readable URLs and filenames
 
-### Mintlify formatting
+**Self-check questions:**
+- Could an LLM accurately understand and explain this content?
+- Can a developer copy and paste these examples and have them run successfully?
+- Are all dependencies, versions, and setup steps clearly stated?
 
-- Start main sections with H2 (`##`) and subsections with H3 (`###`).
-- Use fenced code blocks with language and optional filename.
-- Wrap images in `<Frame>` and include `alt` text.
-- Use callouts for emphasis: `<Note>`, `<Tip>`, `<Warning>`, `<Info>`, `<Check>`.
-- For procedures, prefer `<Steps>` / `<Step>`.
-- For alternatives, use `<Tabs>` / `<Tab>`.
-- For API docs, use `<ParamField>`, `<ResponseField>`, and request/response examples.
+### Mintlify formatting conventions
 
-### Code examples
+Base docs use [Mintlify](https://mintlify.com) for rendering. Follow these conventions:
 
-- Provide complete, runnable examples with realistic data.
-- Include proper error handling and edge cases.
-- Specify language and filename when helpful.
-- Show expected output or verification steps.
+**Headings:**
+- Start main sections with H2 (`##`)
+- Use H3 (`###`) for subsections
+- Use H4 (`####`) sparingly for minor subdivisions
 
-## Third-party guides policy
+**Code blocks:**
+```typescript filename="example.ts"
+// Use fenced code blocks with language
+// Optionally specify filename for context
+const example = "like this";
+```
 
-> Warning: We generally do not accept guides that primarily document a third-party product. Exceptions require a clear Base-focused use case and a tight integration with Base products. Simply deploying on Base or connecting to Base Account/Base App is not sufficient.
+**Images:**
+```jsx
+<Frame>
+  <img src="/path/to/image.png" alt="Descriptive text for accessibility" />
+</Frame>
+```
 
-If your goal is to increase discoverability of your product, please request inclusion on the Base Ecosystem page instead. See the instructions for [updating the Base Ecosystem page](https://github.com/base/web?tab=readme-ov-file#updating-the-base-ecosystem-page).
+**Callouts:**
+- `<Note>` — General information or clarification
+- `<Tip>` — Helpful suggestion or best practice
+- `<Warning>` — Important caution or common mistake
+- `<Info>` — Additional context or reference
+- `<Check>` — Success indicator or verification step
 
-## Review checklist (before submitting a PR)
+**Procedures:**
+```jsx
+<Steps>
+  <Step title="First step">
+    Content for step one
+  </Step>
+  <Step title="Second step">
+    Content for step two
+  </Step>
+</Steps>
+```
 
-- [ ] Fits within existing structure (no new top-level sections)
-- [ ] Minimal, necessary subsections only
-- [ ] Consistent terminology; abbreviations introduced on first use
-- [ ] Code examples are complete, runnable, and validated
-- [ ] Cross-links to related guides/examples/references are included
-- [ ] Uses Mintlify components and heading hierarchy correctly
-- [ ] Accessible images with descriptive `alt` text and frames
-- [ ] AI-friendly: explicit, link-rich, and easy to follow
+**Alternative options:**
+```jsx
+<Tabs>
+  <Tab title="Option A">
+    Content for option A
+  </Tab>
+  <Tab title="Option B">
+    Content for option B
+  </Tab>
+</Tabs>
+```
 
-## Submission process
+**API documentation:**
+```jsx
+<ParamField name="parameterName" type="string" required>
+  Description of the parameter
+</ParamField>
 
-1. Create a PR to `https://github.com/base/docs` with your changes.
-2. Include a clear description of the change and impacted pages.
-3. Request review from the docs team.
-4. Address feedback and iterate.
-5. Once approved, changes will be merged and published.
+<ResponseField name="fieldName" type="object">
+  Description of the response field
+</ResponseField>
+```
 
-## Publishing changes
+### Code example requirements
 
-The core team will review opened PRs. The SLA is 2 weeks, generally on a first-come, first-served basis outside of urgent changes. 
+All code examples must be:
 
-## Storybook for UI components
+1. **Complete and runnable**: Include all necessary imports, setup, and configuration
+2. **Production-ready**: Show proper error handling, edge cases, and validation
+3. **Properly annotated**: Specify language, and include filename when it provides useful context
+4. **Verifiable**: Show expected output or include verification steps
 
-See `storybook/README.md` for details on local Storybook and component docs.
+**Example:**
+
+```typescript filename="transfer-tokens.ts"
+import { encodeFunctionData } from 'viem';
+
+async function transferTokens(to: string, amount: bigint) {
+  try {
+    const data = encodeFunctionData({
+      abi: ERC20_ABI,
+      functionName: 'transfer',
+      args: [to, amount],
+    });
+    
+    // Send transaction...
+    return data;
+  } catch (error) {
+    console.error('Transfer failed:', error);
+    throw error;
+  }
+}
+
+// Expected output: 0xa9059cbb000000...
+```
+
+## Third-party product documentation
+
+> **Warning:** We generally do not accept guides that primarily document third-party products.
+
+**Exceptions require:**
+- A clear, specific Base-focused use case
+- Deep integration with Base products (Account, App, or Chain)
+- Demonstration of unique value to Base developers
+
+Simply deploying a contract on Base or connecting to Base Account/Base App is **not sufficient** for inclusion.
+
+**Alternative:** If your goal is to increase discoverability of your product, request inclusion on the [Base Ecosystem page](https://github.com/base/web?tab=readme-ov-file#updating-the-base-ecosystem-page) instead.
+
+## Pre-submission checklist
+
+Before opening your pull request, verify:
+
+- [ ] Content fits within existing structure (no new top-level sections created)
+- [ ] Uses minimal, necessary subsections only
+- [ ] Terminology is consistent; abbreviations defined on first use
+- [ ] Code examples are complete, tested, and runnable
+- [ ] Cross-links to related guides, examples, and references are included
+- [ ] Mintlify components and heading hierarchy used correctly
+- [ ] All images have descriptive `alt` text and are wrapped in `<Frame>` tags
+- [ ] Content is AI-friendly: explicit, well-linked, and easy to follow
+- [ ] Local preview shows content rendering correctly
+- [ ] No broken links or references to non-existent pages
+
+## Pull request process
+
+### Submitting your PR
+
+1. **Create a pull request** to `https://github.com/base/docs`
+2. **Write a clear description** that includes:
+   - What you changed and why
+   - Links to all pages impacted
+   - Any relevant context or background
+3. **Request review** from the docs team
+4. **Respond to feedback** and iterate on your changes
+5. **Merge**: Once approved, your changes will be merged and published automatically
+
+### Review timeline
+
+- **Standard SLA**: 2 weeks for most contributions
+- **Priority**: First-come, first-served basis, except for urgent fixes
+- **Urgency factors**: Security issues, critical bugs, and time-sensitive updates receive expedited review
+
+### After your PR is merged
+
+Changes are automatically deployed to production once merged. Your contribution will be live on [docs.base.org](https://docs.base.org) within minutes.
+
+## Additional resources
+
+### UI component development
+
+If you're working on custom UI components for the documentation, see `storybook/README.md` for details on running Storybook locally and viewing component documentation.
+
+### Getting help
+
+- **Questions about contributing?** Open a [discussion](https://github.com/base/docs/discussions) in the repository
+- **Found a bug?** Open an [issue](https://github.com/base/docs/issues)
+- **Want to chat?** Join the Base community on [Discord](https://discord.gg/buildonbase)
+
+---
+
+Thank you for contributing to Base documentation! Your efforts help developers worldwide build better applications on Base.
